@@ -1,0 +1,28 @@
+{
+  "name": "course-online-shop-backend",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sina-Ghiasi/course-online-shop-backend.git"
+  },
+  "keywords": [],
+  "author": "Sina Ghiasi",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/Sina-Ghiasi/course-online-shop-backend/issues"
+  },
+  "homepage": "https://github.com/Sina-Ghiasi/course-online-shop-backend#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
