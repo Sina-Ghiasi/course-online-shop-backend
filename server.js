@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 import cors from "cors";
+import userRouter from "./routes/user.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ mongoose
     console.log("Failed to Connect to MongoDB with error : ", error);
   });
 // Routes
+app.use("/api/user", userRouter);
 
 // Listen to port
 const port = process.env.PORT || 5000;

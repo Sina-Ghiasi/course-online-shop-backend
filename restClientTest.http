@@ -1,0 +1,19 @@
+
+POST http://localhost:5000/api/user/register HTTP/1.1
+content-type: application/json
+
+{
+    "email": "sinas@gmail.com",
+    "password": "1234512345",
+    "name":"sina ghiasi",
+    "phoneNumber":"09363600660"
+}
+
+###
+POST http://localhost:5000/api/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "sinas@gmail.com",
+    "password": "1234512345"
+}
