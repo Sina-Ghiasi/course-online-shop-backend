@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import cors from "cors";
 import userRouter from "./routes/user.js";
+import productRouter from "./routes/product.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ mongoose
   });
 // Routes
 app.use("/api/user", userRouter);
+app.use("/api/product", productRouter);
 
 // Listen to port
 const port = process.env.PORT || 5000;

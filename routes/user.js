@@ -13,7 +13,7 @@ router.post(
     //validate user data
     const { error } = registerValidation(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).send({ message: error.details[0].message });
     }
     // checking if the user is already in the DB
     const emailExist = await User.findOne({ email: req.body.email });
@@ -21,9 +21,9 @@ router.post(
       phoneNumber: req.body.phoneNumber,
     });
     if (emailExist)
-      return res.status(400).json({ message: "Email already exists !" });
+      return res.status(400).send({ message: "Email already exists !" });
     if (phoneNumberExist)
-      return res.status(400).json({ message: "Phone Number already exists !" });
+      return res.status(400).send({ message: "Phone Number already exists !" });
 
     // hash password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -36,7 +36,7 @@ router.post(
     });
     try {
       const savedUser = await user.save();
-      res.json({
+      res.send({
         _id: savedUser._id,
         name: savedUser.name,
         email: savedUser.email,
@@ -55,11 +55,11 @@ router.post(
     // validate user data
     const { error } = loginValidation(req.body);
     if (error)
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).send({ message: error.details[0].message });
 
     // checking if the email exists
     const user = await User.findOne({ email: req.body.email.toLowerCase() });
-    if (!user) return res.status(400).json({ message: "Email not found !" });
+    if (!user) return res.status(400).send({ message: "Email not found !" });
 
     // password is correct
     const validPassword = await bcrypt.compare(
@@ -67,7 +67,7 @@ router.post(
       user.password
     );
     if (!validPassword)
-      return res.status(400).json({ message: "Email or Password is wrong !" });
+      return res.status(400).send({ message: "Email or Password is wrong !" });
     res.send({
       _id: user._id,
       name: user.name,
