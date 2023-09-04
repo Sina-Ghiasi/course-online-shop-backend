@@ -26,7 +26,9 @@
     "express-async-handler": "^1.2.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.3.1"
+    "kavenegar": "^1.1.4",
+    "mongoose": "^7.3.1",
+    "otp-generator": "^4.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

@@ -1,12 +1,12 @@
-
+###
 POST http://localhost:5000/api/user/register HTTP/1.1
 content-type: application/json
 
 {
-    "email": "sinas@gmail.com",
+    "email": "sidhhhs@gmail.com",
     "password": "1234512345",
     "name":"sina ghiasi",
-    "phoneNumber":"09363600660"
+    "phoneNumber":"09363644660"
 }
 
 ###
@@ -14,6 +14,48 @@ POST http://localhost:5000/api/user/login HTTP/1.1
 content-type: application/json
 
 {
-    "email": "sinas@gmail.com",
+    "phoneNumber":"09363644660",
     "password": "1234512345"
 }
+
+
+###
+POST http://localhost:5000/api/otp/via-sms/generate HTTP/1.1
+content-type: application/json
+
+{
+    "type":"LOGIN",
+    "phoneNumber": "09363644660"
+}
+
+###
+POST http://localhost:5000/api/otp/via-sms/verify HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiTE9HSU4iLCJwaG9uZU51bWJlciI6IjA5MzYzNjQ0NjYwIiwiX2lkIjoiNjRmNWE4YzVlNzMzMjFiMGQ5NGExMWFmIiwiY3JlYXRlZEF0IjoiMjAyMy0wOS0wNFQwOTo1MjowNS4xOThaIiwiaWF0IjoxNjkzODIxMTI2LCJleHAiOjE2OTM4MjEyNDZ9.2HMECmYPv8O-R83jxgh0-YzMrlFgyQjnzI02CcsL4aw
+
+{
+    "otp": "378225",
+    "phoneNumber":"09363644660"
+}
+
+###
+POST http://localhost:5000/api/otp/via-sms/verify HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTM2MzY0NDY2MCIsImhhc2hlZFBhc3N3b3JkIjoiJDJhJDEwJHI2LllzVjhITUU0elNKVG5KNW05c2V3cW0vRWhJVTVXdFZKLkxLYVI5MUVXLzNLL1FRWTNtIiwidHlwZSI6IlNJR05VUCIsIl9pZCI6IjY0ZjVhMzUwNDhkNTg1NzY4YWQ3NTBmYiIsImNyZWF0ZWRBdCI6IjIwMjMtMDktMDRUMDk6Mjg6NDguODMyWiIsImlhdCI6MTY5MzgxOTcyOSwiZXhwIjoxNjkzODE5ODQ5fQ.z9nhde93ek1F1f3Ryhx1WjbGI_ar0BqnFwTHZoErtuw
+
+
+{
+    "otp": "691829",
+    "phoneNumber": "09363644660"
+       
+}
+
+
+
+###
+Get http://localhost:5000/api/product/ HTTP/1.1
+
+
+###
+Get http://localhost:5000/api/product/649593f96cbc6c3db0c43634 HTTP/1.1
+

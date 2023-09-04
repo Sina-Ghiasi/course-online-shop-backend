@@ -2,8 +2,9 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 import cors from "cors";
-import userRouter from "./routes/user.js";
-import productRouter from "./routes/product.js";
+import userRouter from "./routes/user.routes.js";
+import productRouter from "./routes/product.routes.js";
+import otpRouter from "./routes/otp.routes.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ mongoose
 // Routes
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
+app.use("/api/otp", otpRouter);
 
 // Listen to port
 const port = process.env.PORT || 5000;

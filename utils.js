@@ -1,37 +1,44 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import otpGenerator from "otp-generator";
+import kavenegar from "kavenegar";
 
-export const generateToken = (user) => {
-  return jwt.sign(
-    {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    },
-    process.env.JWT_ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN }
-  );
+export const generateToken = (json, secret, expiresIn) => {
+  return jwt.sign(json, secret, {
+    expiresIn: expiresIn,
+  });
+};
+export const generateOtp = () => {
+  const otp = otpGenerator.generate(6, {
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
+  return otp;
 };
 
-export const isAuth = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+export const sendOtpSms = (phoneNumber, otp) => {
+  const smsAPI = kavenegar.KavenegarApi({
+    apikey: process.env.KAVEEGAR_API_KEY,
+  });
 
-  // authHeader : Bearer XXXXXX
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token)
-    return res
-      .status(401)
-      .send({ message: "Not authorized : token not found !" });
-
-  jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (error, user) => {
-    if (error)
-      res
-        .status(403)
-        .send({ message: "Not authorized : token not verified !" });
-
-    req.user = user;
-    next();
+  return new Promise((resolve, reject) => {
+    smsAPI.VerifyLookup(
+      {
+        receptor: phoneNumber,
+        token: otp,
+        template: process.env.KAVEEGAR_API_TEMPLATE,
+      },
+      (response, status) => {
+        if (status === 200 && response[0]) {
+          resolve({
+            status: "success",
+            statusCode: status,
+          });
+        } else {
+          reject({ status: "failure", statusCode: status });
+        }
+      }
+    );
   });
 };
