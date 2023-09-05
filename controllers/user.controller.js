@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import "dotenv/config";
 import User from "../models/user.model.js";
 import Otp from "../models/otp.model.js";
+import ResetPass from "../models/reset-pass.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken, generateOtp, sendOtpSms } from "../utils.js";
 
@@ -46,18 +47,18 @@ export const registerUser = asyncHandler(async (req, res) => {
     phoneNumber,
     hashedPassword,
     type: "SIGNUP",
-    _id: savedOtp._id,
+    otpId: savedOtp._id,
     createdAt: savedOtp.createdAt,
   };
 
   const otpToken = generateToken(
     otpDetail,
     process.env.JWT_OTP_TOKEN_SECRET,
-    process.env.JWT_OTP_EXPIRES_IN
+    process.env.JWT_OTP_EXPIRES_IN + "s"
   );
 
   res.status(200).send({
-    status: "status",
+    status: "success",
     data: {
       token: otpToken,
     },
@@ -73,32 +74,92 @@ export const loginUser = asyncHandler(async (req, res) => {
       .status(400)
       .send({ status: "failed", message: "Phone Number not registered" });
 
-  const isPasswordCorrect = await bcrypt.compare(user.password, password);
-  if (isPasswordCorrect)
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect)
     return res.status(400).send({
       status: "failed",
       message: "Phone number or password not correct",
     });
 
-  const UserToken = generateToken(
+  const userToken = generateToken(
     {
-      id: user._id,
+      userId: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
     },
     process.env.JWT_ACCESS_TOKEN_SECRET,
-    process.env.JWT_ACCESS_EXPIRES_IN
+    process.env.JWT_ACCESS_EXPIRES_IN + "d"
   );
   res.status(200).send({
     status: "success",
     data: {
-      id: user._id,
       name: user.name,
       email: user.email,
       phoneNumber: user.phoneNumber,
       isAdmin: user.isAdmin,
-      token: UserToken,
+      token: userToken,
+    },
+  });
+});
+
+export const resetPass = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  // check if the OTP was meant for the same phone number for which it is being verified
+  if (req.resetPassDetail.userId !== userId)
+    return res.status(400).send({
+      status: "failure",
+      message: "reset password was not for this particular user",
+    });
+
+  // check if reset pass is available in the DB
+  const resetPass = await ResetPass.findById(req.resetPassDetail.resetPassId);
+
+  if (resetPass === null)
+    return res.status(400).send({
+      status: "failure",
+      message: "Bad Request",
+    });
+
+  // check if reset pass is already used or not
+  if (resetPass.isUsed === true)
+    return res.status(400).send({
+      status: "failure",
+      message: "reset password already used",
+    });
+
+  // mark reset pass as used because it can only used once
+  resetPass.isUsed = true;
+  resetPass.save();
+
+  // hash password
+  const hashedPassword = await bcrypt.hash(req.body.newPassword, 10);
+
+  // get user and reset password
+  const user = await User.findById(userId);
+
+  user.password = hashedPassword;
+  user.save();
+
+  const userToken = generateToken(
+    {
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+    process.env.JWT_ACCESS_TOKEN_SECRET,
+    process.env.JWT_ACCESS_EXPIRES_IN + "d"
+  );
+
+  res.status(200).send({
+    status: "success",
+    data: {
+      name: user.name,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      isAdmin: user.isAdmin,
+      token: userToken,
     },
   });
 });

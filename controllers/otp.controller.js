@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import "dotenv/config";
 import Otp from "../models/otp.model.js";
 import User from "../models/user.model.js";
+import ResetPass from "../models/reset-pass.model.js";
 import { generateOtp, generateToken, sendOtpSms } from "../utils.js";
 
 export const generateAndSendOtp = asyncHandler(async (req, res) => {
@@ -15,7 +16,7 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
       .status(400)
       .send({ status: "failure", message: "Phone Number not registered" });
 
-  const types = ["LOGIN", "FORGOT_PASS", "CHANGE_PASS"];
+  const types = ["LOGIN", "RESET_PASS"];
   if (!types.includes(type))
     return res
       .status(400)
@@ -38,18 +39,18 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
   const otpDetail = {
     type,
     phoneNumber,
-    _id: savedOtp._id,
+    otpId: savedOtp._id,
     createdAt: savedOtp.createdAt,
   };
 
   const otpToken = generateToken(
     otpDetail,
     process.env.JWT_OTP_TOKEN_SECRET,
-    process.env.JWT_OTP_EXPIRES_IN
+    process.env.JWT_OTP_EXPIRES_IN + "s"
   );
 
   res.status(200).send({
-    status: "status",
+    status: "success",
     data: {
       token: otpToken,
     },
@@ -67,7 +68,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
     });
 
   // check if OTP is available in the DB
-  const savedOtp = await Otp.findById(req.otpDetail._id);
+  const savedOtp = await Otp.findById(req.otpDetail.otpId);
   if (savedOtp === null)
     return res.status(400).send({
       status: "failure",
@@ -115,26 +116,25 @@ export const verifyOtp = asyncHandler(async (req, res) => {
             .status(400)
             .send({ status: "failed", message: "User registration failed" });
 
-        const UserToken = generateToken(
+        const userToken = generateToken(
           {
-            id: savedUser._id,
+            userId: savedUser._id,
             name: savedUser.name,
             email: savedUser.email,
             isAdmin: savedUser.isAdmin,
           },
           process.env.JWT_ACCESS_TOKEN_SECRET,
-          process.env.JWT_ACCESS_EXPIRES_IN
+          process.env.JWT_ACCESS_EXPIRES_IN + "d"
         );
 
         res.status(200).send({
           status: "success",
           data: {
-            id: savedUser._id,
             name: savedUser.name,
             email: savedUser.email,
             phoneNumber: savedUser.phoneNumber,
             isAdmin: savedUser.isAdmin,
-            token: UserToken,
+            token: userToken,
           },
         });
       }
@@ -142,33 +142,59 @@ export const verifyOtp = asyncHandler(async (req, res) => {
       break;
     case "LOGIN":
       {
-        const UserToken = generateToken(
+        const userToken = generateToken(
           {
-            id: user._id,
+            userId: user._id,
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
           },
           process.env.JWT_ACCESS_TOKEN_SECRET,
-          process.env.JWT_ACCESS_EXPIRES_IN
+          process.env.JWT_ACCESS_EXPIRES_IN + "d"
         );
         res.status(200).send({
           status: "success",
           data: {
-            id: user._id,
             name: user.name,
             email: user.email,
             phoneNumber: user.phoneNumber,
             isAdmin: user.isAdmin,
-            token: UserToken,
+            token: userToken,
           },
         });
       }
 
       break;
-    case "FORGOT_PASS":
-      break;
-    case "CHANGE_PASS":
+    case "RESET_PASS":
+      {
+        const resetPassInstance = new ResetPass({
+          userId: user._id,
+        });
+        const savedResetPass = await resetPassInstance.save();
+
+        const resetPassDetail = {
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          resetPassId: savedResetPass._id,
+        };
+        const resetPassToken = generateToken(
+          resetPassDetail,
+          process.env.JWT_RESET_PASS_TOKEN_SECRET,
+          process.env.JWT_RESET_PASS_EXPIRES_IN + "s"
+        );
+        res.status(200).send({
+          status: "success",
+          data: {
+            userId: user._id,
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            isAdmin: user.isAdmin,
+            token: resetPassToken,
+          },
+        });
+      }
       break;
     default:
       res.status(400).send({

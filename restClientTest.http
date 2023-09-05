@@ -1,3 +1,5 @@
+// ----------------------------- signup -----------------------------
+
 ###
 POST http://localhost:5000/api/user/register HTTP/1.1
 content-type: application/json
@@ -10,14 +12,28 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:5000/api/otp/via-sms/verify HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTM2MzY0NDY2MCIsImhhc2hlZFBhc3N3b3JkIjoiJDJhJDEwJGVsUXFSYnU2cmluTGtJYTJKM0N0U2VveE1naWpYbWJXT2diaTZRME5QNTM1Zy5jSWJMLjRTIiwidHlwZSI6IlNJR05VUCIsIm90cElkIjoiNjRmNmUwZjRlZmNjNmY4OTY2ZThhN2E4IiwiY3JlYXRlZEF0IjoiMjAyMy0wOS0wNVQwODowNDowNC4xMThaIiwiaWF0IjoxNjkzOTAxMDQ0LCJleHAiOjE2OTM5MDExNjR9.E59IPEDIvQ5vh0WsoonKnrvLHZ-gTENZCzdO8nF4UpQ
+
+{
+    "otp": "843561",
+    "phoneNumber":"09363644660"
+}
+
+
+// ----------------------------- login -----------------------------
+
+###
 POST http://localhost:5000/api/user/login HTTP/1.1
 content-type: application/json
 
 {
     "phoneNumber":"09363644660",
-    "password": "1234512345"
+    "password": "64674877dfda8756"
 }
 
+// ---------------------- OTP login via SMS -------------------------
 
 ###
 POST http://localhost:5000/api/otp/via-sms/generate HTTP/1.1
@@ -31,30 +47,52 @@ content-type: application/json
 ###
 POST http://localhost:5000/api/otp/via-sms/verify HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiTE9HSU4iLCJwaG9uZU51bWJlciI6IjA5MzYzNjQ0NjYwIiwiX2lkIjoiNjRmNWE4YzVlNzMzMjFiMGQ5NGExMWFmIiwiY3JlYXRlZEF0IjoiMjAyMy0wOS0wNFQwOTo1MjowNS4xOThaIiwiaWF0IjoxNjkzODIxMTI2LCJleHAiOjE2OTM4MjEyNDZ9.2HMECmYPv8O-R83jxgh0-YzMrlFgyQjnzI02CcsL4aw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiTE9HSU4iLCJwaG9uZU51bWJlciI6IjA5MzYzNjQ0NjYwIiwib3RwSWQiOiI2NGY2ZWI0ZGFiZjgwNGUwYmIzOTAzMGUiLCJjcmVhdGVkQXQiOiIyMDIzLTA5LTA1VDA4OjQ4OjEzLjcwMVoiLCJpYXQiOjE2OTM5MDM2OTUsImV4cCI6MTY5MzkwMzgxNX0.rteZJj1O-qPvCEc8-awcKkmViPMHBkofLy90gR5rgto
 
 {
-    "otp": "378225",
+    "otp": "119809",
     "phoneNumber":"09363644660"
 }
+
+// --------------------------- reset pass ---------------------------
+
+###
+POST http://localhost:5000/api/otp/via-sms/generate HTTP/1.1
+content-type: application/json
+
+{
+    "type":"RESET_PASS",
+    "phoneNumber": "09363644660"
+}
+
 
 ###
 POST http://localhost:5000/api/otp/via-sms/verify HTTP/1.1
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwicGhvbmVOdW1iZXIiOiIwOTM2MzY0NDY2MCIsImhhc2hlZFBhc3N3b3JkIjoiJDJhJDEwJHI2LllzVjhITUU0elNKVG5KNW05c2V3cW0vRWhJVTVXdFZKLkxLYVI5MUVXLzNLL1FRWTNtIiwidHlwZSI6IlNJR05VUCIsIl9pZCI6IjY0ZjVhMzUwNDhkNTg1NzY4YWQ3NTBmYiIsImNyZWF0ZWRBdCI6IjIwMjMtMDktMDRUMDk6Mjg6NDguODMyWiIsImlhdCI6MTY5MzgxOTcyOSwiZXhwIjoxNjkzODE5ODQ5fQ.z9nhde93ek1F1f3Ryhx1WjbGI_ar0BqnFwTHZoErtuw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiUkVTRVRfUEFTUyIsInBob25lTnVtYmVyIjoiMDkzNjM2NDQ2NjAiLCJvdHBJZCI6IjY0ZjZlYjkxYWJmODA0ZTBiYjM5MDMxNCIsImNyZWF0ZWRBdCI6IjIwMjMtMDktMDVUMDg6NDk6MjEuOTA4WiIsImlhdCI6MTY5MzkwMzc2MiwiZXhwIjoxNjkzOTAzODgyfQ.7Etww924f5wGhhOs3RSxHMjYhFCwdNOyBNbLraFjP8g
+
+{
+    "otp": "548971",
+    "phoneNumber":"09363644660"
+}
+
+###
+POST http://localhost:5000/api/user/reset-pass HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGY2ZTEwYWVmY2M2Zjg5NjZlOGE3YWQiLCJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwiaXNBZG1pbiI6ZmFsc2UsInJlc2V0UGFzc0lkIjoiNjRmNmViYWNhYmY4MDRlMGJiMzkwMzE5IiwiaWF0IjoxNjkzOTAzNzg4LCJleHAiOjE2OTM5MDQzODh9.lw2paHNmullGpH_j7AIGQN-00uzcauZTNo8_z7BRyhA
 
 
 {
-    "otp": "691829",
-    "phoneNumber": "09363644660"
-       
+    "userId": "64f6e10aefcc6f8966e8a7ad",
+    "newPassword": "64674877dfda8756"   
 }
 
-
+// ------------------------ get all products -------------------------
 
 ###
 Get http://localhost:5000/api/product/ HTTP/1.1
 
+// ------------------------ get product by ID ------------------------
 
 ###
 Get http://localhost:5000/api/product/649593f96cbc6c3db0c43634 HTTP/1.1

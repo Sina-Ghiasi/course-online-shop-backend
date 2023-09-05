@@ -3,7 +3,7 @@ import Order from "../models/order.model";
 
 export const getAllOrders = asyncHandler(async (req, res) => {
   const allOrders = await Order.find()
-    .populate("user")
+    .populate("userId")
     .populate("orderItems.product");
 
   res.status(200).send(allOrders);
@@ -11,7 +11,7 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 
 export const getMyPaidOrders = asyncHandler(async (req, res) => {
   const myPaidOrders = await Order.find({
-    $and: [{ user: req.user._id }, { status: "paid" }],
+    $and: [{ userId: req.user._id }, { status: "paid" }],
   });
   res.status(200).send(myPaidOrders);
 });

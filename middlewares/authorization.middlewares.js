@@ -48,3 +48,31 @@ export const isOtpAuth = (req, res, next) => {
     next();
   });
 };
+
+export const isResetPassAuth = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  // authHeader : Bearer XXXXXX
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token)
+    return res.status(401).send({
+      status: "failed",
+      message: "Not authorized : token not found !",
+    });
+
+  jwt.verify(
+    token,
+    process.env.JWT_RESET_PASS_TOKEN_SECRET,
+    (error, decoded) => {
+      if (error)
+        return res.status(403).send({
+          status: "failed",
+          message: "Not authorized : token not verified !",
+        });
+
+      req.resetPassDetail = decoded;
+      next();
+    }
+  );
+};

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import mongoose from "mongoose";
 const otpSchema = new mongoose.Schema(
   {
@@ -8,7 +9,7 @@ const otpSchema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      expires: 120, // The document will be automatically deleted after 2 minutes of its creation time
+      expires: parseInt(process.env.JWT_OTP_EXPIRES_IN, 10), // The document will be automatically deleted after 2 minutes of its creation time
     },
     isUsed: { type: Boolean, default: false },
   },
