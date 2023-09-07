@@ -12,15 +12,11 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
     phoneNumber: phoneNumber,
   });
   if (!user)
-    return res
-      .status(400)
-      .send({ status: "failure", message: "Phone Number not registered" });
+    return res.status(400).send({ message: "Phone Number not registered" });
 
   const types = ["LOGIN", "RESET_PASS"];
   if (!types.includes(type))
-    return res
-      .status(400)
-      .send({ status: "failure", message: "Incorrect OTP type provided" });
+    return res.status(400).send({ message: "Incorrect OTP type provided" });
 
   const otpInstance = new Otp({
     otp: generateOtp(),
@@ -31,7 +27,6 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
   const smsApiResponse = await sendOtpSms(phoneNumber, savedOtp.otp);
   if (smsApiResponse && smsApiResponse.status === "failure")
     return res.status(400).send({
-      status: "failure",
       message: "SMS not send",
       detail: { smsApiResponse: smsApiResponse.statusCode },
     });
@@ -50,10 +45,7 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
   );
 
   res.status(200).send({
-    status: "success",
-    data: {
-      token: otpToken,
-    },
+    token: otpToken,
   });
 });
 
@@ -63,7 +55,6 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   // check if the OTP was meant for the same phone number for which it is being verified
   if (req.otpDetail.phoneNumber !== phoneNumber)
     return res.status(400).send({
-      status: "failure",
       message: "OTP was not sent to this particular phone number",
     });
 
@@ -71,14 +62,12 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   const savedOtp = await Otp.findById(req.otpDetail.otpId);
   if (savedOtp === null)
     return res.status(400).send({
-      status: "failure",
       message: "Bad Request",
     });
 
   // check if OTP is already used or not
   if (savedOtp.isUsed === true)
     return res.status(400).send({
-      status: "failure",
       message: "OTP already used",
     });
 
@@ -89,7 +78,6 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   // check if OTP is equal to the OTP in the DB
   if (savedOtp.otp !== otp)
     return res.status(400).send({
-      status: "failure",
       message: "OTP NOT Matched",
     });
 
@@ -112,9 +100,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
 
         const savedUser = await user.save();
         if (!savedUser)
-          return res
-            .status(400)
-            .send({ status: "failed", message: "User registration failed" });
+          return res.status(400).send({ message: "User registration failed" });
 
         const userToken = generateToken(
           {
@@ -128,14 +114,11 @@ export const verifyOtp = asyncHandler(async (req, res) => {
         );
 
         res.status(200).send({
-          status: "success",
-          data: {
-            name: savedUser.name,
-            email: savedUser.email,
-            phoneNumber: savedUser.phoneNumber,
-            isAdmin: savedUser.isAdmin,
-            token: userToken,
-          },
+          name: savedUser.name,
+          email: savedUser.email,
+          phoneNumber: savedUser.phoneNumber,
+          isAdmin: savedUser.isAdmin,
+          token: userToken,
         });
       }
 
@@ -153,14 +136,11 @@ export const verifyOtp = asyncHandler(async (req, res) => {
           process.env.JWT_ACCESS_EXPIRES_IN + "d"
         );
         res.status(200).send({
-          status: "success",
-          data: {
-            name: user.name,
-            email: user.email,
-            phoneNumber: user.phoneNumber,
-            isAdmin: user.isAdmin,
-            token: userToken,
-          },
+          name: user.name,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+          isAdmin: user.isAdmin,
+          token: userToken,
         });
       }
 
@@ -185,20 +165,16 @@ export const verifyOtp = asyncHandler(async (req, res) => {
           process.env.JWT_RESET_PASS_EXPIRES_IN + "s"
         );
         res.status(200).send({
-          status: "success",
-          data: {
-            userId: user._id,
-            name: user.name,
-            phoneNumber: user.phoneNumber,
-            isAdmin: user.isAdmin,
-            token: resetPassToken,
-          },
+          userId: user._id,
+          name: user.name,
+          phoneNumber: user.phoneNumber,
+          isAdmin: user.isAdmin,
+          token: resetPassToken,
         });
       }
       break;
     default:
       res.status(400).send({
-        status: "failure",
         message: "Incorrect OTP type provided",
       });
       break;

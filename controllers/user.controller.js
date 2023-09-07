@@ -14,14 +14,10 @@ export const registerUser = asyncHandler(async (req, res) => {
       phoneNumber: phoneNumber,
     })
   )
-    return res
-      .status(400)
-      .send({ status: "failed", message: "Phone Number already registered" });
+    return res.status(400).send({ message: "Phone Number already registered" });
 
   if (await User.findOne({ email: email }))
-    return res
-      .status(400)
-      .send({ status: "failed", message: "Email already registered" });
+    return res.status(400).send({ message: "Email already registered" });
 
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -36,7 +32,6 @@ export const registerUser = asyncHandler(async (req, res) => {
   const smsApiResponse = await sendOtpSms(phoneNumber, savedOtp.otp);
   if (smsApiResponse && smsApiResponse.status === "failure")
     return res.status(400).send({
-      status: "failure",
       message: "SMS not send",
       detail: { smsApiResponse: smsApiResponse.statusCode },
     });
@@ -58,10 +53,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   );
 
   res.status(200).send({
-    status: "success",
-    data: {
-      token: otpToken,
-    },
+    token: otpToken,
   });
 });
 
@@ -70,14 +62,11 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ phoneNumber: phoneNumber });
   if (!user)
-    return res
-      .status(400)
-      .send({ status: "failed", message: "Phone Number not registered" });
+    return res.status(400).send({ message: "Phone Number not registered" });
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
   if (!isPasswordCorrect)
     return res.status(400).send({
-      status: "failed",
       message: "Phone number or password not correct",
     });
 
@@ -92,14 +81,11 @@ export const loginUser = asyncHandler(async (req, res) => {
     process.env.JWT_ACCESS_EXPIRES_IN + "d"
   );
   res.status(200).send({
-    status: "success",
-    data: {
-      name: user.name,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      isAdmin: user.isAdmin,
-      token: userToken,
-    },
+    name: user.name,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    isAdmin: user.isAdmin,
+    token: userToken,
   });
 });
 
@@ -108,7 +94,6 @@ export const resetPass = asyncHandler(async (req, res) => {
   // check if the OTP was meant for the same phone number for which it is being verified
   if (req.resetPassDetail.userId !== userId)
     return res.status(400).send({
-      status: "failure",
       message: "reset password was not for this particular user",
     });
 
@@ -117,14 +102,12 @@ export const resetPass = asyncHandler(async (req, res) => {
 
   if (resetPass === null)
     return res.status(400).send({
-      status: "failure",
       message: "Bad Request",
     });
 
   // check if reset pass is already used or not
   if (resetPass.isUsed === true)
     return res.status(400).send({
-      status: "failure",
       message: "reset password already used",
     });
 
@@ -153,13 +136,10 @@ export const resetPass = asyncHandler(async (req, res) => {
   );
 
   res.status(200).send({
-    status: "success",
-    data: {
-      name: user.name,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      isAdmin: user.isAdmin,
-      token: userToken,
-    },
+    name: user.name,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    isAdmin: user.isAdmin,
+    token: userToken,
   });
 });

@@ -9,14 +9,12 @@ export const isUserAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      status: "failed",
       message: "Not authorized : token not found !",
     });
 
   jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (error, decoded) => {
     if (error)
       return res.status(403).send({
-        status: "failed",
         message: "Not authorized : token not verified !",
       });
 
@@ -33,14 +31,12 @@ export const isOtpAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      status: "failed",
       message: "Not authorized : token not found !",
     });
 
   jwt.verify(token, process.env.JWT_OTP_TOKEN_SECRET, (error, decoded) => {
     if (error)
       return res.status(403).send({
-        status: "failed",
         message: "Not authorized : token not verified !",
       });
 
@@ -57,7 +53,6 @@ export const isResetPassAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      status: "failed",
       message: "Not authorized : token not found !",
     });
 
@@ -67,7 +62,6 @@ export const isResetPassAuth = (req, res, next) => {
     (error, decoded) => {
       if (error)
         return res.status(403).send({
-          status: "failed",
           message: "Not authorized : token not verified !",
         });
 

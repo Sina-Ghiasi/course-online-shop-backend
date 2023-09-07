@@ -10,7 +10,6 @@ export const registerUserValidation = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error)
     return res.status(400).send({
-      status: "failed",
       message: error.details[0].message,
     });
 
@@ -25,7 +24,6 @@ export const loginUserValidation = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error)
     return res.status(400).send({
-      status: "failed",
       message: error.details[0].message,
     });
 
@@ -40,7 +38,6 @@ export const resetPassValidation = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error)
     return res.status(400).send({
-      status: "failed",
       message: error.details[0].message,
     });
 
@@ -55,7 +52,6 @@ export const otpViaSmsGenerateValidation = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error)
     return res.status(400).send({
-      status: "failed",
       message: error.details[0].message,
     });
 
@@ -70,7 +66,6 @@ export const otpViaSmsVerifyValidation = (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error)
     return res.status(400).send({
-      status: "failed",
       message: error.details[0].message,
     });
 
