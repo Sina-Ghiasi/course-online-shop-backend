@@ -143,3 +143,21 @@ export const resetPass = asyncHandler(async (req, res) => {
     token: userToken,
   });
 });
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const allUsers = await User.find();
+
+  res.status(200).send(allUsers);
+});
+
+export const deleteUserById = asyncHandler(async (req, res) => {
+  const result = await User.findByIdAndRemove(req.params.userId);
+
+  res.status(200).send(result);
+});
+
+export const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.userId);
+
+  res.status(200).send(user);
+});

@@ -1,7 +1,7 @@
 // ----------------------------- signup -----------------------------
 
 ###
-POST http://localhost:5000/api/user/register HTTP/1.1
+POST http://localhost:5000/api/users/register HTTP/1.1
 content-type: application/json
 
 {
@@ -25,7 +25,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoic2luYSBna
 // ----------------------------- login -----------------------------
 
 ###
-POST http://localhost:5000/api/user/login HTTP/1.1
+POST http://localhost:5000/api/users/login HTTP/1.1
 content-type: application/json
 
 {
@@ -77,7 +77,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiUkVTRVRfU
 }
 
 ###
-POST http://localhost:5000/api/user/reset-pass HTTP/1.1
+POST http://localhost:5000/api/users/reset-pass HTTP/1.1
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGY2ZTEwYWVmY2M2Zjg5NjZlOGE3YWQiLCJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwiaXNBZG1pbiI6ZmFsc2UsInJlc2V0UGFzc0lkIjoiNjRmNmViYWNhYmY4MDRlMGJiMzkwMzE5IiwiaWF0IjoxNjkzOTAzNzg4LCJleHAiOjE2OTM5MDQzODh9.lw2paHNmullGpH_j7AIGQN-00uzcauZTNo8_z7BRyhA
 
@@ -87,13 +87,36 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGY2Z
     "newPassword": "64674877dfda8756"   
 }
 
+// ------------------------- get all users ---------------------------
+
+###
+Get http://localhost:5000/api/users/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGY2ZTEwYWVmY2M2Zjg5NjZlOGE3YWQiLCJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwiaXNBZG1pbiI6ZmFsc2UsInJlc2V0UGFzc0lkIjoiNjRmNmViYWNhYmY4MDRlMGJiMzkwMzE5IiwiaWF0IjoxNjkzOTAzNzg4LCJleHAiOjE2OTM5MDQzODh9.lw2paHNmullGpH_j7AIGQN-00uzcauZTNo8_z7BRyhA
+
+
+// ------------------------- delete user by id ---------------------------
+
+###
+DELETE  http://localhost:5000/api/users/id HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGZiNWQ4MmE2ZWVhMjQ1Mzg1ZmM4YTIiLCJuYW1lIjoiYWRtaW4iLCJlbWFpbCI6InNpc25hc3RleW5AZ21haWwuY29tIiwiaXNBZG1pbiI6dHJ1ZSwiaWF0IjoxNjk0MzM4NzA2LCJleHAiOjE2OTUyMDI3MDZ9.w-JRX-ovleSe_ch5DAnx_pydnPkoZo-UhBLsTGDhZoA
+
 // ------------------------ get all products -------------------------
 
 ###
-Get http://localhost:5000/api/product/ HTTP/1.1
+Get http://localhost:5000/api/products/ HTTP/1.1
 
 // ------------------------ get product by ID ------------------------
 
 ###
-Get http://localhost:5000/api/product/649593f96cbc6c3db0c43634 HTTP/1.1
+Get http://localhost:5000/api/products/649593f96cbc6c3db0c43634 HTTP/1.1
 
+// ------------------------ create product ------------------------
+POST http://localhost:5000/api/users/reset-pass HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NGY2ZTEwYWVmY2M2Zjg5NjZlOGE3YWQiLCJuYW1lIjoic2luYSBnaGlhc2kiLCJlbWFpbCI6InNpZGhoaHNAZ21haWwuY29tIiwiaXNBZG1pbiI6ZmFsc2UsInJlc2V0UGFzc0lkIjoiNjRmNmViYWNhYmY4MDRlMGJiMzkwMzE5IiwiaWF0IjoxNjkzOTAzNzg4LCJleHAiOjE2OTM5MDQzODh9.lw2paHNmullGpH_j7AIGQN-00uzcauZTNo8_z7BRyhA
+
+
+{
+    "userId": "64f6e10aefcc6f8966e8a7ad",
+    "newPassword": "64674877dfda8756"   
+}

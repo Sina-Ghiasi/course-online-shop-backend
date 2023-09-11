@@ -5,7 +5,11 @@ import {
   registerUserValidation,
   resetPassValidation,
 } from "../middlewares/validations.middlewares.js";
-import { isResetPassAuth } from "../middlewares/authorization.middlewares.js";
+import {
+  hasAdminAccess,
+  isResetPassAuth,
+  isUserAuth,
+} from "../middlewares/authorization.middlewares.js";
 
 const router = express.Router();
 
@@ -16,6 +20,14 @@ router.post(
   isResetPassAuth,
   resetPassValidation,
   userController.resetPass
+);
+router.get("/", isUserAuth, hasAdminAccess, userController.getAllUsers);
+router.get("/:userId", isUserAuth, hasAdminAccess, userController.getUserById);
+router.delete(
+  "/:userId",
+  isUserAuth,
+  hasAdminAccess,
+  userController.deleteUserById
 );
 
 export default router;

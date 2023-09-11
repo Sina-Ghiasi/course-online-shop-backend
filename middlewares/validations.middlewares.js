@@ -71,3 +71,38 @@ export const otpViaSmsVerifyValidation = (req, res, next) => {
 
   next();
 };
+
+export const createProductValidation = (req, res, next) => {
+  const schema = joi.object({
+    name: joi.string().required(),
+    description: joi.string().allow(""),
+    image: joi.string().allow(""),
+    price: joi.number().required(),
+    discount: joi.number().optional(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error)
+    return res.status(400).send({
+      message: error.details[0].message,
+    });
+
+  next();
+};
+
+export const updateProductValidation = (req, res, next) => {
+  const schema = joi.object({
+    productId: joi.string().required(),
+    name: joi.string().required(),
+    description: joi.string().allow(""),
+    image: joi.string().allow(""),
+    price: joi.number().required(),
+    discount: joi.number().optional(),
+  });
+  const { error } = schema.validate(req.body);
+  if (error)
+    return res.status(400).send({
+      message: error.details[0].message,
+    });
+
+  next();
+};

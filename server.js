@@ -31,8 +31,9 @@ mongoose
     console.log("Failed to Connect to MongoDB with error : ", error);
   });
 // Routes
-app.use("/api/user", userRouter);
-app.use("/api/product", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
+app.use("/api/orders", productRouter);
 app.use("/api/otp", otpRouter);
 
 // Listen to port

@@ -23,6 +23,15 @@ export const isUserAuth = (req, res, next) => {
   });
 };
 
+export const hasAdminAccess = (req, res, next) => {
+  if (!req.user.isAdmin)
+    return res.status(401).send({
+      message: "Not authorized : you do not have admin access !",
+    });
+
+  next();
+};
+
 export const isOtpAuth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
