@@ -22,6 +22,12 @@ router.post(
   userController.resetPass
 );
 router.get("/", isUserAuth, hasAdminAccess, userController.getAllUsers);
+router.get(
+  "/number-of-users",
+  isUserAuth,
+  hasAdminAccess,
+  userController.getNumberOfUsers
+);
 router.get("/:userId", isUserAuth, hasAdminAccess, userController.getUserById);
 router.delete(
   "/:userId",

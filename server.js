@@ -7,6 +7,7 @@ import cors from "cors";
 import userRouter from "./routes/user.routes.js";
 import productRouter from "./routes/product.routes.js";
 import otpRouter from "./routes/otp.routes.js";
+import orderRouter from "./routes/order.routes.js";
 
 const app = express();
 
@@ -35,8 +36,8 @@ mongoose
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
-app.use("/api/orders", productRouter);
 app.use("/api/otp", otpRouter);
+app.use("/api/orders", orderRouter);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

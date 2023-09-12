@@ -63,3 +63,9 @@ export const deleteProductById = asyncHandler(async (req, res) => {
 
   res.status(200).send(product);
 });
+
+export const getNumberOfProducts = asyncHandler(async (req, res) => {
+  const numberOfProducts = await Product.countDocuments();
+
+  res.status(200).send(numberOfProducts.toString());
+});

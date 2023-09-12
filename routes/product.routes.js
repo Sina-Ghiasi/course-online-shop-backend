@@ -13,7 +13,6 @@ import { uploadImage } from "../middlewares/upload.middlewares.js";
 const router = express.Router();
 
 router.get("/", productController.getAllProducts);
-router.get("/:productId", productController.getProductById);
 router.post(
   "/create-product",
   isUserAuth,
@@ -31,7 +30,13 @@ router.post(
   updateProductValidation,
   productController.updateProduct
 );
-
+router.get(
+  "/number-of-products",
+  isUserAuth,
+  hasAdminAccess,
+  productController.getNumberOfProducts
+);
+router.get("/:productId", productController.getProductById);
 router.delete(
   "/:productId",
   isUserAuth,

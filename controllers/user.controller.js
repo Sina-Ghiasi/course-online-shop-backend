@@ -161,3 +161,9 @@ export const getUserById = asyncHandler(async (req, res) => {
 
   res.status(200).send(user);
 });
+
+export const getNumberOfUsers = asyncHandler(async (req, res) => {
+  const numberOfUsers = await User.countDocuments();
+
+  res.status(200).send(numberOfUsers.toString());
+});
