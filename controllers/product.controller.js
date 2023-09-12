@@ -14,7 +14,17 @@ export const getProductById = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-  const product = new Product(req.body);
+  if (!req.file)
+    return res.status(400).send({ message: "Product image uploading failed" });
+
+  const product = new Product({
+    name: req.body.name,
+    description: req.body.description,
+    image:
+      req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename,
+    price: req.body.price,
+    discount: req.body.discount,
+  });
 
   const savedProduct = await product.save();
   if (!savedProduct)
@@ -24,14 +34,28 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { productId, ...update } = req.body;
+  const newProductData = {
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    discount: req.body.discount,
+  };
+  if (req.file)
+    newProductData.image =
+      req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
 
-  const updateResult = await Product.updateOne({ _id: productId }, update);
+  const updatedProduct = await Product.findOneAndUpdate(
+    { _id: req.body.productId },
+    newProductData,
+    {
+      new: true,
+    }
+  );
 
-  if (!updateResult.modifiedCount === 1)
+  if (!updatedProduct)
     return res.status(400).send({ message: "Product update failed" });
 
-  res.status(200).send(updateResult);
+  res.status(200).send(updatedProduct);
 });
 
 export const deleteProductById = asyncHandler(async (req, res) => {

@@ -8,6 +8,7 @@ import {
   hasAdminAccess,
   isUserAuth,
 } from "../middlewares/authorization.middlewares.js";
+import { uploadImage } from "../middlewares/upload.middlewares.js";
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.post(
   "/create-product",
   isUserAuth,
   hasAdminAccess,
+  uploadImage.single("image"),
   createProductValidation,
   productController.createProduct
 );
@@ -25,6 +27,7 @@ router.post(
   "/update-product",
   isUserAuth,
   hasAdminAccess,
+  uploadImage.single("image"),
   updateProductValidation,
   productController.updateProduct
 );

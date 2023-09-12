@@ -1,5 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
+import path from "path";
+import { fileURLToPath } from "url";
 import "dotenv/config";
 import cors from "cors";
 import userRouter from "./routes/user.routes.js";
@@ -35,6 +37,9 @@ app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/orders", productRouter);
 app.use("/api/otp", otpRouter);
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Listen to port
 const port = process.env.PORT || 5000;
