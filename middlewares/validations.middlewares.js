@@ -75,6 +75,7 @@ export const otpViaSmsVerifyValidation = (req, res, next) => {
 export const createProductValidation = (req, res, next) => {
   const schema = joi.object({
     name: joi.string().required(),
+    summary: joi.string().allow(""),
     description: joi.string().allow(""),
     image: joi.string().allow(""),
     price: joi.number().required(),
@@ -93,6 +94,7 @@ export const updateProductValidation = (req, res, next) => {
   const schema = joi.object({
     productId: joi.string().required(),
     name: joi.string().required(),
+    summary: joi.string().allow(""),
     description: joi.string().allow(""),
     image: joi.string().allow(""),
     price: joi.number().required(),

@@ -14,21 +14,20 @@ export const getProductById = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-  if (!req.file)
-    return res.status(400).send({ message: "Product image uploading failed" });
-
-  const product = new Product({
+  const product = {
     name: req.body.name,
+    summary: req.body.summary,
     description: req.body.description,
-    image:
-      req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename,
     price: req.body.price,
     discount: req.body.discount,
-  });
+  };
+  if (req.file)
+    product.image =
+      req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
 
   const savedProduct = await product.save();
   if (!savedProduct)
-    return res.status(400).send({ message: "Product creation failed" });
+    return res.status(400).send({ message: "ایجاد محصول موفق نبود" });
 
   res.status(200).send(savedProduct);
 });
@@ -36,6 +35,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 export const updateProduct = asyncHandler(async (req, res) => {
   const newProductData = {
     name: req.body.name,
+    summary: req.body.summary,
     description: req.body.description,
     price: req.body.price,
     discount: req.body.discount,
@@ -53,7 +53,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
   );
 
   if (!updatedProduct)
-    return res.status(400).send({ message: "Product update failed" });
+    return res.status(400).send({ message: "بروزرسانی محصول موفق نبود" });
 
   res.status(200).send(updatedProduct);
 });

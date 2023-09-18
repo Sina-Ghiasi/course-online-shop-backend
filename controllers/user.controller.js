@@ -14,10 +14,12 @@ export const registerUser = asyncHandler(async (req, res) => {
       phoneNumber: phoneNumber,
     })
   )
-    return res.status(400).send({ message: "Phone Number already registered" });
+    return res
+      .status(400)
+      .send({ message: "شماره موبایل قبلا استفاده شده است" });
 
   if (await User.findOne({ email: email }))
-    return res.status(400).send({ message: "Email already registered" });
+    return res.status(400).send({ message: "ایمیل قبلا استفاده شده است" });
 
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +34,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   const smsApiResponse = await sendOtpSms(phoneNumber, savedOtp.otp);
   if (smsApiResponse && smsApiResponse.status === "failure")
     return res.status(400).send({
-      message: "SMS not send",
+      message: "ارسال پیامک ناموفق بود",
       detail: { smsApiResponse: smsApiResponse.statusCode },
     });
 
@@ -62,12 +64,12 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ phoneNumber: phoneNumber });
   if (!user)
-    return res.status(400).send({ message: "Phone Number not registered" });
+    return res.status(400).send({ message: "شماره موبایل قبلا ثبت نشده است" });
 
   const isPasswordCorrect = await bcrypt.compare(password, user.password);
   if (!isPasswordCorrect)
     return res.status(400).send({
-      message: "Phone number or password not correct",
+      message: "شماره موبایل یا رمز عبور اشتباه است",
     });
 
   const userToken = generateToken(
@@ -94,7 +96,7 @@ export const resetPass = asyncHandler(async (req, res) => {
   // check if the OTP was meant for the same phone number for which it is being verified
   if (req.resetPassDetail.userId !== userId)
     return res.status(400).send({
-      message: "reset password was not for this particular user",
+      message: "تغییر رمز عبور برای این کاربر ثبت نشده است",
     });
 
   // check if reset pass is available in the DB
@@ -108,7 +110,7 @@ export const resetPass = asyncHandler(async (req, res) => {
   // check if reset pass is already used or not
   if (resetPass.isUsed === true)
     return res.status(400).send({
-      message: "reset password already used",
+      message: "فرصت تغییر رمز عبور قبلا استفاده شده است",
     });
 
   // mark reset pass as used because it can only used once

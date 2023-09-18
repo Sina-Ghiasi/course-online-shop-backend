@@ -12,11 +12,11 @@ export const generateAndSendOtp = asyncHandler(async (req, res) => {
     phoneNumber: phoneNumber,
   });
   if (!user)
-    return res.status(400).send({ message: "Phone Number not registered" });
+    return res.status(400).send({ message: "شماره موبایل ثبت نشده است" });
 
   const types = ["LOGIN", "RESET_PASS"];
   if (!types.includes(type))
-    return res.status(400).send({ message: "Incorrect OTP type provided" });
+    return res.status(400).send({ message: "رمز یکبار مصرف معتبر نمی باشد" });
 
   const otpInstance = new Otp({
     otp: generateOtp(),
@@ -55,7 +55,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   // check if the OTP was meant for the same phone number for which it is being verified
   if (req.otpDetail.phoneNumber !== phoneNumber)
     return res.status(400).send({
-      message: "OTP was not sent to this particular phone number",
+      message: "رمز یکبار مصرف به این شماره ارسال نشده بود",
     });
 
   // check if OTP is available in the DB
@@ -68,7 +68,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   // check if OTP is already used or not
   if (savedOtp.isUsed === true)
     return res.status(400).send({
-      message: "OTP already used",
+      message: "رمز یکبار مصرف قبلا استفاده شده است",
     });
 
   // mark OTP as used because it can only used once
@@ -78,7 +78,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   // check if OTP is equal to the OTP in the DB
   if (savedOtp.otp !== otp)
     return res.status(400).send({
-      message: "OTP NOT Matched",
+      message: "رمز یکبار مصرف صحیح نبود",
     });
 
   const user = await User.findOne({
@@ -100,7 +100,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
 
         const savedUser = await user.save();
         if (!savedUser)
-          return res.status(400).send({ message: "User registration failed" });
+          return res.status(400).send({ message: "ثبت نام کاربر ناموفق بود" });
 
         const userToken = generateToken(
           {
@@ -175,7 +175,7 @@ export const verifyOtp = asyncHandler(async (req, res) => {
       break;
     default:
       res.status(400).send({
-        message: "Incorrect OTP type provided",
+        message: "رمز یکبار مصرف صحیح نبود",
       });
       break;
   }

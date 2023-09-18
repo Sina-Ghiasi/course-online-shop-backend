@@ -9,13 +9,13 @@ export const isUserAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      message: "Not authorized : token not found !",
+      message: "عملیات مجاز نیست : توکن پبدا نشد",
     });
 
   jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET, (error, decoded) => {
     if (error)
       return res.status(403).send({
-        message: "Not authorized : token not verified !",
+        message: "عملیات مجاز نیست : توکن نامعتبر است",
       });
 
     req.user = decoded;
@@ -26,7 +26,7 @@ export const isUserAuth = (req, res, next) => {
 export const hasAdminAccess = (req, res, next) => {
   if (!req.user.isAdmin)
     return res.status(401).send({
-      message: "Not authorized : you do not have admin access !",
+      message: "عملیات مجاز نیست : شما دسترسی ادمین ندارید",
     });
 
   next();
@@ -40,13 +40,13 @@ export const isOtpAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      message: "Not authorized : token not found !",
+      message: "عملیات مجاز نیست : توکن پیدا نشد",
     });
 
   jwt.verify(token, process.env.JWT_OTP_TOKEN_SECRET, (error, decoded) => {
     if (error)
       return res.status(403).send({
-        message: "Not authorized : token not verified !",
+        message: "عملیات مجاز نیست :  توکن نامعتبر است",
       });
 
     req.otpDetail = decoded;
@@ -62,7 +62,7 @@ export const isResetPassAuth = (req, res, next) => {
 
   if (!token)
     return res.status(401).send({
-      message: "Not authorized : token not found !",
+      message: "عملیات مجاز نیست : توکن یافت نشد",
     });
 
   jwt.verify(
@@ -71,7 +71,7 @@ export const isResetPassAuth = (req, res, next) => {
     (error, decoded) => {
       if (error)
         return res.status(403).send({
-          message: "Not authorized : token not verified !",
+          message: "عملیات مجاز نیست : توکن نامعتبر است",
         });
 
       req.resetPassDetail = decoded;
