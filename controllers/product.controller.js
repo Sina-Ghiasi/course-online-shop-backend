@@ -14,13 +14,14 @@ export const getProductById = asyncHandler(async (req, res) => {
 });
 
 export const createProduct = asyncHandler(async (req, res) => {
-  const product = {
+  const product = new Product({
     name: req.body.name,
     summary: req.body.summary,
     description: req.body.description,
     price: req.body.price,
     discount: req.body.discount,
-  };
+    spotPlayerId: req.body.spotPlayerId,
+  });
   if (req.file)
     product.image =
       req.protocol + "://" + req.get("host") + "/uploads/" + req.file.filename;
@@ -39,6 +40,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     discount: req.body.discount,
+    spotPlayerId: req.body.spotPlayerId,
   };
   if (req.file)
     newProductData.image =

@@ -7,6 +7,7 @@ const productSchema = new mongoose.Schema(
     image: { type: String },
     price: { type: Number, required: true },
     discount: { type: Number, default: 0 },
+    spotPlayerId: { type: String, required: true },
   },
   {
     timestamps: true,

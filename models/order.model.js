@@ -6,6 +6,8 @@ const orderSchema = new mongoose.Schema(
       {
         name: { type: String, required: true },
         price: { type: Number, required: true },
+        discount: { type: Number, required: true },
+        licenseKey: { type: String },
         productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
