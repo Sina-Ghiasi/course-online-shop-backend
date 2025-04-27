@@ -14,10 +14,10 @@ Welcome to the **Course Online Shop Backend** repository! This project serves as
 ## Table of Contents
 
 - [Overview](#-overview)
-- [Technologies Used](#-technologies-used)
+- [Technologies Used](#%EF%B8%8F-technologies-used)
 - [Getting Started](#-getting-started)
-  - [Prerequisites](#-prerequisites)
-  - [Installation](#-installation)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
 - [Related Repositories](#-related-repositories)
 - [Contributing](#-contributing)
 - [License](#-license)
